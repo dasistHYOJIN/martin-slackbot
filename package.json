@@ -1,0 +1,24 @@
+{
+  "name": "martin-bot",
+  "version": "1.0.0",
+  "description": "![martin-bot-img](https://user-images.githubusercontent.com/25656510/64355809-ce580180-d03c-11e9-94a1-91cc3f24aea5.png) ### 소개 우아한테크코스 1기의 크루인 마틴을 따라하는 슬랙봇.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dasistHYOJIN/martin-slackbot.git"
+  },
+  "author": "Hyo-Jin(Ehem)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dasistHYOJIN/martin-slackbot/issues"
+  },
+  "homepage": "https://github.com/dasistHYOJIN/martin-slackbot#readme"
+}
