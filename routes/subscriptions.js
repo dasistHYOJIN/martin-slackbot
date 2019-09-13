@@ -36,6 +36,11 @@ const sendReaction = function (event) {
     options.qs.channel = channel_id;
     options.qs.text = positiveMessages[messageIndex];
 
+    if (makeRandomNumberLessThan(100) < 66) {
+        console.log('아무 말도 하지 않겠다');
+        return;
+    }
+
     request.post(options, function (err, response, body) {
         if (err) {
             console.error("err >> " + err);
