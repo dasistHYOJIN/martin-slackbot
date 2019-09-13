@@ -21,9 +21,8 @@ let options = {
 
 router.post('/action-endpoint', function (req, res) {
     const reqBody = req.body;
-    console.log(reqBody);
 
-    if (reqBody.event.type === 'message' && !reqBody.event.bot_id !== bot_id) {
+    if (reqBody.event.type === 'message' && reqBody.event.bot_id !== bot_id) {
         sendReaction(reqBody.event);
     }
 
