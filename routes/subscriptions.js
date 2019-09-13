@@ -5,6 +5,7 @@ const router = express.Router();
 
 const request = require('request');
 const token = process.env.TOKEN;
+const bot_id = process.env.BOT_ID;
 
 const positiveMessages = [
     '마자마자~', '그럴 수 있지', '그럼그럼', '그치그치',
@@ -22,7 +23,7 @@ router.post('/action-endpoint', function (req, res) {
     const reqBody = req.body;
     console.log(reqBody);
 
-    if (reqBody.event.type === 'message') {
+    if (reqBody.event.type === 'message' && !reqBody.event.bot_id !== bot_id) {
         sendReaction(reqBody.event);
     }
 
