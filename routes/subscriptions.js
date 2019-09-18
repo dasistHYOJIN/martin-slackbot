@@ -36,7 +36,7 @@ const sendReaction = function (event) {
     options.qs.channel = channel_id;
     options.qs.text = positiveMessages[messageIndex];
 
-    if (makeRandomNumberLessThan(100) < 66) {
+    if (makeRandomNumberLessThan(10) < 8) {
         console.log('아무 말도 하지 않겠다');
         return;
     }
