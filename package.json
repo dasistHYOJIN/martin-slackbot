@@ -8,6 +8,8 @@
     "@slack/events-api": "^2.3.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.26",
     "request": "^2.88.0"
   },
   "devDependencies": {},
@@ -19,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/dasistHYOJIN/martin-slackbot.git"
   },
-  "author": "Hyo-Jin(Ehem)",
+  "author": "Hyo-Jin(Ehem, Hé-reine, エ-ヘム, 譪解胟, 咳咳)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/dasistHYOJIN/martin-slackbot/issues"
