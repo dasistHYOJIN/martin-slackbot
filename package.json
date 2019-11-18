@@ -10,7 +10,9 @@
     "express": "^4.17.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.2.1"
   },
   "devDependencies": {},
   "scripts": {

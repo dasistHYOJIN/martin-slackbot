@@ -6,6 +6,8 @@ const express = require('express');
 const router = express.Router();
 
 const request = require('request');
+const { createLogger, format, transports } = require('winston');
+const { combine, label, printf } = format;
 const moment = require('moment');
 require('moment-timezone');
 
@@ -13,6 +15,25 @@ const token = process.env.TOKEN;
 const bot_id = process.env.BOT_ID;
 
 moment.tz.setDefault("Asia/Seoul");
+
+const logFormat = printf(({level, message}) => `[${timeStampFormat()}] ${level}: ${message}`);
+const logger = createLogger({
+    format: logFormat,
+    transports: [
+          new transports.File({
+            filename: 'logs/error.log',
+            level: 'error'
+        }),
+    new transports.File({
+            filename: 'logs/info.log',
+            level: 'info'
+        }),
+    new transports.File({
+            filename: 'logs/logs.log'
+        }),
+      new transports.Console()
+  ]
+});
 
 const positiveMessages = [
     '마자마자~', '그럴 수 있지', '그럼그럼', '그치그치',
@@ -34,12 +55,8 @@ router.post('/action-endpoint', function (req, res) {
         result = sendReaction(reqBody.event);
     }
 
-    console.log("=====================");
-    console.log(reqBody);
-    console.log("=====================");
-
-    console.log("[" + moment().format('YYYY-MM-DD HH:mm:ss') + "] " +
-        reqBody.event.channel_type + ": " + reqBody.event.user + " -> " + result);
+    const logMessage = "TYPE=" + reqBody.event.type + " SUBTYPE=" + reqBody.event.subtype + " USERNAME=" + reqBody.event.username + " CHANNEL_TYPE=" + reqBody.event.channel_type + " RESULT_TEXT=" + result;
+    logger.info(logMessage);
 
     res.status(200).json(result);
 });
@@ -60,7 +77,7 @@ const sendReaction = function (event) {
 
     request.post(options, function (err, response, body) {
         if (err) {
-            console.error("err >> " + err);
+            logger.error(err);
             return;
         }
         console.log(body);
@@ -72,5 +89,9 @@ const sendReaction = function (event) {
 const makeRandomNumberLessThan = function (maxNumber) {
     return Math.floor(Math.random() * maxNumber);
 }
+
+const timeStampFormat = function () {
+    return moment().format('YYYY-MM-DD HH:mm:ss.SSS ZZ');
+};
 
 module.exports = router;
