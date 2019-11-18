@@ -6,8 +6,16 @@ const express = require('express');
 const router = express.Router();
 
 const request = require('request');
-const { createLogger, format, transports } = require('winston');
-const { combine, label, printf } = format;
+const {
+    createLogger,
+    format,
+    transports
+} = require('winston');
+const {
+    combine,
+    label,
+    printf
+} = format;
 const moment = require('moment');
 require('moment-timezone');
 
@@ -16,7 +24,10 @@ const bot_id = process.env.BOT_ID;
 
 moment.tz.setDefault("Asia/Seoul");
 
-const logFormat = printf(({level, message}) => `[${timeStampFormat()}] ${level}: ${message}`);
+const logFormat = printf(({
+    level,
+    message
+}) => `[${timeStampFormat()}] ${level}: ${message}`);
 const logger = createLogger({
     format: logFormat,
     transports: [
@@ -52,7 +63,7 @@ router.post('/action-endpoint', function (req, res) {
     let result;
 
     if (reqBody.event.type === 'message' && reqBody.event.bot_id !== bot_id) {
-        result = sendReaction(reqBody.event);
+        result = sendReaction(reqBody.event, makeRandomNumberLessThan(10));
     }
 
     const logMessage = "TYPE=" + reqBody.event.type + " SUBTYPE=" + reqBody.event.subtype + " USERNAME=" + reqBody.event.username + " CHANNEL_TYPE=" + reqBody.event.channel_type + " RESULT_TEXT=" + result;
@@ -61,11 +72,11 @@ router.post('/action-endpoint', function (req, res) {
     res.status(200).json(result);
 });
 
-const sendReaction = function (event) {
+const sendReaction = function (event, number) {
     if (event.thread_ts) {
         return '댓글이란다~';
     }
-    if (makeRandomNumberLessThan(10) < 8) {
+    if (number < 9) {
         return '아무 말도 하지 않겠다';
     }
 
@@ -80,7 +91,8 @@ const sendReaction = function (event) {
             logger.error(err);
             return;
         }
-        console.log(body);
+        
+        logger.info("'" + positiveMessages[messageIndex] + "'라고 맞장구 완료");
     });
 
     return positiveMessages[messageIndex];
