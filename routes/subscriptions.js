@@ -29,13 +29,17 @@ let options = {
 router.post('/action-endpoint', function (req, res) {
     const reqBody = req.body;
     let result;
-    
+
     if (reqBody.event.type === 'message' && reqBody.event.bot_id !== bot_id) {
         result = sendReaction(reqBody.event);
     }
-    
-    console.log("[" + moment().format('YYYY-MM-DD HH:mm:ss') + "] " 
-                + reqBody.event.channel_type + ": " + reqBody.event.user + " -> " + result);
+
+    console.log("=====================");
+    console.log(reqBody);
+    console.log("=====================");
+
+    console.log("[" + moment().format('YYYY-MM-DD HH:mm:ss') + "] " +
+        reqBody.event.channel_type + ": " + reqBody.event.user + " -> " + result);
 
     res.status(200).json(result);
 });
@@ -47,7 +51,7 @@ const sendReaction = function (event) {
     if (makeRandomNumberLessThan(10) < 8) {
         return '아무 말도 하지 않겠다';
     }
-    
+
     const channel_id = event.channel;
     const messageIndex = makeRandomNumberLessThan(positiveMessages.length);
 
@@ -61,7 +65,7 @@ const sendReaction = function (event) {
         }
         console.log(body);
     });
-    
+
     return positiveMessages[messageIndex];
 }
 
