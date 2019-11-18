@@ -31,7 +31,7 @@ const logger = createLogger({
     new transports.File({
             filename: 'logs/logs.log'
         }),
-      new transports.Console()
+    new transports.Console()
   ]
 });
 
@@ -40,19 +40,12 @@ const positiveMessages = [
     '좋은데?', '괜찮은데?', '나쁘지 않은데?', '오키오키',
     ':martin:', ':sunshine:'];
 
-let options = {
-    uri: 'https://slack.com/api/chat.postMessage',
-    qs: {
-        token: token
-    }
-};
-
 router.post('/action-endpoint', function (req, res) {
     const reqBody = req.body;
     let result;
 
     if (reqBody.event.type === 'message' && reqBody.event.bot_id !== bot_id) {
-        result = sendReaction(reqBody.event);
+        result = processReaction(reqBody.event, makeRandomNumberLessThan(10));
     }
 
     const logMessage = "TYPE=" + reqBody.event.type + " SUBTYPE=" + reqBody.event.subtype + " USERNAME=" + reqBody.event.username + " CHANNEL_TYPE=" + reqBody.event.channel_type + " RESULT_TEXT=" + result;
@@ -61,29 +54,37 @@ router.post('/action-endpoint', function (req, res) {
     res.status(200).json(result);
 });
 
-const sendReaction = function (event) {
+const processReaction = function (event, number) {
     if (event.thread_ts) {
         return '댓글이란다~';
     }
-    if (makeRandomNumberLessThan(10) < 8) {
+    if (number < 9) {
         return '아무 말도 하지 않겠다';
     }
 
-    const channel_id = event.channel;
     const messageIndex = makeRandomNumberLessThan(positiveMessages.length);
+    let options = {
+        uri: 'https://slack.com/api/chat.postMessage',
+        qs: {
+            token: token,
+            channel: event.channel,
+            text: positiveMessages[messageIndex]
+        }
+    };
+    sendReaction(options, messageIndex);
 
-    options.qs.channel = channel_id;
-    options.qs.text = positiveMessages[messageIndex];
+    return positiveMessages[messageIndex];
+}
 
+const sendReaction = function (options, messageIndex) {
     request.post(options, function (err, response, body) {
         if (err) {
             logger.error(err);
             return;
         }
-        console.log(body);
-    });
 
-    return positiveMessages[messageIndex];
+        logger.info("'" + positiveMessages[messageIndex] + "'라고 맞장구 완료");
+    });
 }
 
 const makeRandomNumberLessThan = function (maxNumber) {
