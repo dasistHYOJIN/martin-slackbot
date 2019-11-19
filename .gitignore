@@ -1,3 +1,6 @@
 ## Ignore Environment File
-*.env
-/logs
+.vscode/
+config/
+logs/
+
+*.DS_Store
